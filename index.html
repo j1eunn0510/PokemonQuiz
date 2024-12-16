@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>포켓몬 퀴즈</title>
+    <style>
+        @font-face {
+            font-family: 'DungGeunMo';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/DungGeunMo.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #3564AD;
+            font-family: 'DungGeunMo', sans-serif;
+        }
+
+        .intro {
+            text-align: center;
+        }
+
+        .intro_game-title {
+            font-size: 5rem;
+            margin-bottom: 60px;
+            color: #FFCB05;
+            text-shadow: 
+                4px 4px 0 #2A75BB, 
+                5px 5px 0 #000000, 
+                6px 6px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 10px;
+            
+        }
+
+        .button-container div {
+            padding: 10px 20px;
+            border: 2px solid black;
+            font-size: 1rem;
+            cursor: pointer;
+            background-color: white;
+            text-align: center;
+            border-radius: 3px;
+        }
+
+        .button-container div:hover {
+            background-color: #FFCB05;
+        }
+    </style>
+    <script>
+        function confirmGuestPlay() {
+            const proceed = confirm("비회원으로 플레이하시면 랭킹에 등재될 수 없습니다. 계속하시겠습니까?");
+            if (proceed) {
+                window.location.href = "select.html";
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="intro">
+        <h1 class="intro_game-title">포켓몬 퀴즈</h1>
+        <div class="button-container">
+            <div class="signup" onclick="location.href='signup.html'">회원가입</div>
+            <div class="login" onclick="location.href='login.html'">로그인</div>
+            <div class="nonlogin" onclick="confirmGuestPlay()">비회원으로 플레이하기</div>
+        </div>
+    </div>
+</body>
+</html>

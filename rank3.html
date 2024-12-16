@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>랭킹</title>
+    <style>
+        @font-face {
+            font-family: 'DungGeunMo';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/DungGeunMo.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+        body {
+            font-family: 'DungGeunMo', sans-serif;
+            background-color: #3564AD;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 30px;
+            color: #FFCB05;
+        }
+
+        .ranking-list {
+            width: 80%;
+            max-width: 600px;
+            max-height: 400px; /* 최대 높이 설정 */
+            overflow-y: auto; /* 스크롤 활성화 */
+            /* 스크롤 영역 배경색 */
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .ranking-item {
+            background-color: #FFCB05;
+            color: #3564AD;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.5rem;
+        }
+
+        .button-container button {
+            font-family: 'DungGeunMo', sans-serif;
+            background-color: #FFCB05;
+            color: #3564AD;
+            border: none;
+            padding: 10px;
+            margin-top: 20px;
+            font-size: 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .button-container button:hover {
+            background-color: #FFAA00;
+        }
+
+        .ranking-list::-webkit-scrollbar {
+        width: 8px; /* 스크롤바 너비 */
+        }
+
+        .ranking-list::-webkit-scrollbar-thumb {
+        background-color: #FFAA00; /* 스크롤바 색상 */
+        border-radius: 5px;
+        }
+
+        .ranking-list::-webkit-scrollbar-track {
+        background-color: #2A75BB; /* 스크롤바 트랙 색상 */
+        }
+    </style>
+</head>
+<body>
+    <h1>Quiz 3</h1>
+    <h1>랭킹</h1>
+    <div class="ranking-list" id="rankingList"></div>
+    <div class="button-container">
+
+        <button onclick="window.location.href='index.html'">홈으로</button>
+        <button onclick="window.location.href='select.html'">시작하기</button>
+        
+    </div>
+
+    <script>
+        // 로컬 스토리지에서 기존 랭킹 가져오기
+        let rankings3 = JSON.parse(localStorage.getItem('rankings3')) || [];
+    
+        // URL에서 사용자 이름과 점수 가져오기
+        const urlParams = new URLSearchParams(window.location.search);
+        const username = urlParams.get('username');
+        const score3 = parseInt(urlParams.get('score3'), 10);
+    
+        if (username && !isNaN(score3)) {
+            // 기존 사용자 찾기
+            const existingUser = rankings3.find(rank3 => rank3.username === username);
+    
+            if (existingUser) {
+                // 기존 점수보다 높은 경우 업데이트
+                if (score3 > existingUser.score3) {
+                    existingUser.score3 = score3;
+                }
+            } else {
+                // 새로운 사용자 추가
+                rankings3.push({ username, score3 });
+            }
+    
+            // 점수 높은 순으로 정렬
+            rankings3.sort((a, b) => b.score3 - a.score3);
+    
+            // 로컬 스토리지에 저장
+            localStorage.setItem('rankings3', JSON.stringify(rankings3));
+        }
+    
+        // undefined 점수 제거
+        rankings3 = rankings3.filter(rank3 => !isNaN(rank3.score3));
+    
+        // 랭킹 리스트 표시
+        const rankingList = document.getElementById('rankingList');
+
+        
+        // 공동 순위를 계산
+        let currentRank = 1; // 현재 순위
+        let previousScore = null; // 이전 점수
+        let skipCount = 0; // 순위 스킵 수
+
+        rankings3.forEach((rank3, index) => {
+        // 점수가 이전 점수와 다르면 순위 업데이트
+        if (rank3.score3 !== previousScore) {
+            currentRank += skipCount; // 스킵된 순위를 반영
+            skipCount = 1; // 다음 동일 점수를 위해 초기화
+        }    else {
+        skipCount++; // 동일 점수일 경우 순위 스킵
+        }
+
+        // 현재 점수를 이전 점수로 저장
+        previousScore = rank3.score3;
+
+        // 순위 항목 생성
+        const rankItem = document.createElement('div');
+        rankItem.className = 'ranking-item';
+        rankItem.textContent = `${currentRank}위 _ ${rank3.username} _ ${rank3.score3}점`;
+        rankingList.appendChild(rankItem);
+        });
+
+    </script>
+    
+</body>
+</html>

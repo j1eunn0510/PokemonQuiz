@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz1: 순서 맞추기 게임</title>
+    <style>
+        @font-face {
+            font-family: 'DungGeunMo';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/DungGeunMo.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #3564AD;
+            font-family: 'DungGeunMo', sans-serif;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        .intro_game-title {
+            font-weight: bold;
+            font-size: 4rem; /* 크기 축소 */
+            position: absolute; 
+            top: 30px; /* 위치 조정 */
+            left: 50%; 
+            transform: translateX(-50%);
+            color: #FFCB05;
+            text-align: center;
+            text-shadow: 
+                4px 4px 0 #2A75BB, 
+                5px 5px 0 #000000, 
+                6px 6px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        .quiz-container {
+        	margin-top: 90px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px; /* 간격 축소 */
+            flex-grow: 1;
+            flex-direction: column;
+        }
+
+        .quiz-image {
+            width: 300px; /* 이미지 크기 축소 */
+            height: 300px; 
+            background-color: #ccc;
+            border-radius: 10px;
+            background-size: contain; 
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .quiz-question {
+            max-width: 400px; /* 너비 축소 */
+            font-size: 20px; /* 폰트 크기 축소 */
+            color: white;
+            text-align: left;
+        }
+
+        .quiz-choices button {
+            font-family: 'DungGeunMo';
+            display: block;
+            background-color: #FFCB05;
+            color: #2A75BB;
+            border: none;
+            padding: 12px; /* 버튼 크기 축소 */
+            width: 100%;
+            font-size: 18px; /* 폰트 크기 축소 */
+            margin-bottom: 15px; /* 간격 축소 */
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .quiz-choices button:hover {
+            background-color: #FFAA00;
+        }
+
+        /* Timer Bar */
+        .timer-bar-container {
+            width: 100%;
+            height: 4px; /* 크기 축소 */
+            background-color: #ddd;
+        }
+
+        .timer-bar {
+            width: 100%;
+            height: 100%;
+            background-color: #FFCB05;
+            transition: width 1s linear;
+        }
+
+        /* Score Display */
+        .score-display {
+            position: absolute;
+            top: 15px; /* 위치 조정 */
+            right: 20px;
+            font-size: 20px; /* 크기 축소 */
+            color: white;
+        }
+
+        .correct-answer {
+            background-color: #4CAF50 !important;
+        }
+
+        .incorrect-answer {
+            background-color: #F44336 !important;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="intro_game-title">실루엣 맞추기</div>
+    <div class="score-display" id="scoreDisplay">점수: 0</div>
+
+    <div class="quiz-container">
+        <div class="quiz-image" id="quizImage"></div>
+        <div class="quiz-question" id="quizQuestion">
+            <div class="timer-bar-container">
+                <div class="timer-bar" id="timerBar"></div>
+            </div>
+            <h3 id="questionText">Q1. 다음 포켓몬의 이름은?</h3>
+            <div class="quiz-choices">
+                <button id="btn1" onclick="selectAnswer(1)">1) 메타몽</button>
+                <button id="btn2" onclick="selectAnswer(2)">2) 이브이</button>
+                <button id="btn3" onclick="selectAnswer(3)">3) 피카츄</button>
+                <button id="btn4" onclick="selectAnswer(4)">4) 쥬레곤</button>
+                <button id="btn5" onclick="selectAnswer(5)">5) 푸린</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let score = 0;
+        let timer;
+        let currentQuestion = 1;
+        const questions = [
+            {
+                questionText: "Q1. 다음 포켓몬의 이름은?",
+                choices: ["메타몽", "이브이", "꼬부기", "쥬레곤", "푸린"],
+                correctAnswer: 3,
+                quizImage: "./quiz1img/꼬부기.png"
+            },
+            {
+                questionText: "Q2. 다음 포켓몬의 이름은?",
+                choices: ["메타몽", "피카츄", "리자몽", "뮤", "잠만보"],
+                correctAnswer: 4,
+                quizImage: "./quiz1img/뮤.png"
+            },
+            {
+                questionText: "Q3. 다음 포켓몬의 이름은?",
+                choices: ["푸린", "잠만보", "이브이", "리자몽", "메타몽"],
+                correctAnswer: 3,
+                quizImage: "./quiz1img/이브이.png"
+            },
+            {
+                questionText: "Q4. 다음 포켓몬의 이름은?",
+                choices: ["이상해씨", "피카츄", "푸린", "텅구리", "메타몽"],
+                correctAnswer: 1,
+                quizImage: "./quiz1img/이상해씨.png"
+            },
+            {
+                questionText: "Q5. 다음 포켓몬의 이름은?",
+                choices: ["텅구리", "리자몽", "피카츄", "메타몽", "푸린"],
+                correctAnswer: 5,
+                quizImage: "./quiz1img/푸린.png"
+            }
+        ];
+
+        function updateScore() {
+            document.getElementById("scoreDisplay").textContent = `점수: ${score}`;
+        }
+
+        function startTimer() {
+            let timeLeft = 5; // 5초
+            const timerBar = document.getElementById("timerBar");
+            timerBar.style.width = "100%";
+
+            timer = setInterval(() => {
+                timeLeft--;
+                timerBar.style.width = `${(timeLeft / 5) * 100}%`;
+
+                if (timeLeft === 0) {
+                    clearInterval(timer);
+                    moveToNextQuestion();
+                }
+            }, 1000);
+        }
+
+        function selectAnswer(choice) {
+            clearInterval(timer);
+
+            const buttons = document.querySelectorAll(".quiz-choices button");
+            buttons.forEach(button => button.disabled = true); // 모든 버튼 비활성화
+
+            // 정답 확인
+            const correctAnswer = questions[currentQuestion - 1].correctAnswer;
+            if (choice === correctAnswer) {
+                score++;
+                document.getElementById(`btn${choice}`).classList.add("correct-answer");
+            } else {
+                document.getElementById(`btn${choice}`).classList.add("incorrect-answer");
+                document.getElementById(`btn${correctAnswer}`).classList.add("correct-answer");
+            }
+
+            updateScore();
+            setTimeout(moveToNextQuestion, 1000); // 1초 후에 다음 문제로 이동
+        }
+
+        function moveToNextQuestion() {
+            if (currentQuestion < questions.length) {
+                currentQuestion++;
+                loadQuestion();
+            } else {
+                // 점수 페이지로 이동
+                window.location.href = "score.html?score=" + score;
+            }
+        }
+
+        function loadQuestion() {
+            const question = questions[currentQuestion - 1];
+            document.getElementById("questionText").textContent = question.questionText;
+            
+            // 이미지 경로 수정
+            document.getElementById("quizImage").style.backgroundImage = `url('${question.quizImage}')`;
+
+            const buttons = document.querySelectorAll(".quiz-choices button");
+
+            // 버튼 텍스트 갱신
+            question.choices.forEach((choice, index) => {
+                buttons[index].textContent = `${index + 1}) ${choice}`;
+                buttons[index].disabled = false; // 버튼 활성화
+                buttons[index].classList.remove("correct-answer", "incorrect-answer"); // 버튼 상태 초기화
+            });
+
+            startTimer();
+        }
+
+        // 게임 시작 시 첫 번째 문제 로드
+        window.onload = loadQuestion;
+    </script>
+
+</body>
+</html>

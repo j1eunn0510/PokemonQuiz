@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz2 : 진화 순서 나열하기</title>
+    <style>
+	    @font-face {
+	        font-family: 'DungGeunMo';
+	        src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/DungGeunMo.woff') format('woff');
+	        font-weight: normal;
+	        font-style: normal;
+	    }
+	
+	    body {
+	        margin: 0;
+	        padding: 0;
+	        background-color: #3564AD;
+	        font-family: 'DungGeunMo', sans-serif;
+	        display: flex;
+	        flex-direction: column;
+	        align-items: center;
+	        justify-content: center;
+	        height: 100vh;
+	    }
+	
+	    .game-title {
+	        font-weight: bold;
+	        font-size: 4rem; /* 폰트 크기 조정 */
+	        margin-bottom: 40px;
+	        color: #FFCB05;
+	        text-align: center;
+	        text-shadow: 
+	            6px 6px 0 #2A75BB, 
+	            7px 7px 0 #000000, 
+	            8px 8px 5px rgba(0, 0, 0, 0.5);
+	    }
+	
+	    .quiz-container {
+	        display: flex;
+	        flex-direction: column;
+	        align-items: center;
+	    }
+	
+	    .quiz-question {
+	        color: white;
+	        font-size: 32px; /* 폰트 크기 조정 */
+	        margin-bottom: 30px;
+	    }
+	
+	    .timer-bar-container {
+	        width: 80%; /* 너비 조정 */
+	        height: 10px; /* 높이 조정 */
+	        background-color: #ddd;
+	        margin-bottom: 30px;
+	        border-radius: 5px;
+	        overflow: hidden;
+	    }
+	
+	    .timer-bar {
+	        width: 80%;
+	        height: 80%;
+	        background-color: #FFCB05;
+	        transition: width 1s linear;
+	    }
+	
+	    .image-container {
+	        display: flex;
+	        gap: 30px; /* 간격 조정 */
+	        margin-bottom: 30px;
+	    }
+	
+	    .image-slot {
+	        width: 200px; /* 크기 조정 */
+	        height: 200px; /* 크기 조정 */
+	        border: 2px dashed #ddd;
+	        background-color: #f3f3f3;
+	        border-radius: 10px;
+	        background-size: contain;
+	        background-repeat: no-repeat;
+	        background-position: center;
+	    }
+	
+	    .block-container {
+	        display: flex;
+	        gap: 30px; /* 간격 조정 */
+	        justify-content: center;
+	    }
+	
+	    .number-block {
+	        width: 110px; /* 크기 조정 */
+	        height: 110px; /* 크기 조정 */
+	        background-color: #FFCB05;
+	        color: #2A75BB;
+	        border-radius: 50%;
+	        display: flex;
+	        align-items: center;
+	        justify-content: center;
+	        font-size: 24px; /* 폰트 크기 조정 */
+	        font-weight: bold;
+	        cursor: grab;
+	        transition: background-color 0.3s;
+	    }
+	
+	    .number-block:hover {
+	        background-color: #FFAA00;
+	    }
+	
+	    .result-message {
+	        margin-top: 30px; /* 간격 조정 */
+	        font-size: 32px; /* 폰트 크기 조정 */
+	        color: white;
+	    }
+	
+	    .score-display {
+	        position: absolute;
+	        top: 30px; /* 위치 조정 */
+	        right: 30px; /* 위치 조정 */
+	        font-size: 32px; /* 폰트 크기 조정 */
+	        color: white;
+	    }
+	</style>
+
+	</head>
+	<body>
+	
+	    <div class="game-title">진화 순서 나열하기</div>
+	    <div class="score-display" id="scoreDisplay">점수: 0</div>
+	    
+	    <div class="quiz-container" id="quizContainer">
+	        <div class="quiz-question" id="quizQuestion"></div>
+	        <div class="timer-bar-container" id="timerBarContainer">
+	            <div class="timer-bar" id="timerBar"></div>
+	        </div>
+	        <div class="image-container" id="imageContainer">
+	            <div class="image-slot" id="slot1"></div>
+	            <div class="image-slot" id="slot2"></div>
+	            <div class="image-slot" id="slot3"></div>
+	        </div>
+	        <div class="block-container" id="blockContainer">
+	            <div class="number-block" id="block1" draggable="true">1</div>
+	            <div class="number-block" id="block2" draggable="true">2</div>
+	            <div class="number-block" id="block3" draggable="true">3</div>
+	        </div>
+	        <div class="result-message" id="resultMessage"></div>
+	    </div>
+	
+	<script>
+        let currentQuestion = 0;
+        let timer;
+        let score2 = 0;
+
+        const questions = [
+            {
+                description: "Q1. 포켓몬의 진화 순서대로 나열하세요.",
+                order: [2, 3, 1],
+                images: [
+                    "./quiz2img/2-1-2.png",
+                    "./quiz2img/2-1-3.png",
+                    "./quiz2img/2-1-1.png"
+                ]
+            },
+            {
+                description: "Q2. 포켓몬의 진화 순서대로 나열하세요.",
+                order: [3, 1, 2],
+                images: [
+                	 "./quiz2img/2-2-3.png",
+                	 "./quiz2img/2-2-1.png",
+                	 "./quiz2img/2-2-2.png"
+                ]
+            },
+            {
+                description: "Q3. 포켓몬의 진화 순서대로 나열하세요.",
+                order: [1, 3, 2],
+                images: [
+                	 "./quiz2img/2-3-1.png",
+                	 "./quiz2img/2-3-3.png",
+                	 "./quiz2img/2-3-2.png"
+                ]
+            },
+            {
+                description: "Q4. 포켓몬의 진화 순서대로 나열하세요.",
+                order: [2, 1, 3],
+                images: [
+                	 "./quiz2img/2-4-2.png",
+                	 "./quiz2img/2-4-1.png",
+                	 "./quiz2img/2-4-3.png"
+                ]
+            },
+            {
+                description: "Q5. 포켓몬의 진화 순서대로 나열하세요.",
+                order: [2, 1, 3],
+                images: [
+                	 "./quiz2img/2-5-2.png",
+                	 "./quiz2img/2-5-1.png",
+                	 "./quiz2img/2-5-3.png"
+                ]
+            }
+        ];
+
+        function updateScore() {
+            document.getElementById("scoreDisplay").textContent = `점수: ${score2}`;
+        }
+
+        function startTimer() {
+            let timeLeft = 10; // 5초
+            const timerBar = document.getElementById("timerBar");
+            timerBar.style.width = "100%";
+
+            timer = setInterval(() => {
+                timeLeft--;
+                timerBar.style.width = `${(timeLeft / 5) * 100}%`;
+
+                if (timeLeft === 0) {
+                    clearInterval(timer);
+                    moveToNextQuestion();
+                }
+            }, 1000);
+        }
+
+        function loadQuestion() {
+            const question = questions[currentQuestion];
+            const slots = document.querySelectorAll(".image-slot");
+
+            document.getElementById("quizQuestion").textContent = question.description;
+
+            // 이미지 슬롯 초기화
+            slots.forEach((slot, index) => {
+                // 이미지 경로 수정
+                slot.style.backgroundImage = `url('${question.images[index]}')`;
+                slot.dataset.correct = question.order[index];
+                slot.dataset.current = ""; // 초기화
+            });
+
+            // 블록을 보이도록 설정
+            const blocks = document.querySelectorAll(".number-block");
+            blocks.forEach(block => {
+                block.style.visibility = "visible";
+            });
+
+            startTimer();
+        }
+
+
+        function moveToNextQuestion() {
+            clearInterval(timer);
+
+            // 결과 메시지 및 블록을 초기화
+            document.getElementById("resultMessage").textContent = "";
+
+            // 문제를 넘어갈 때 블록을 다시 보이도록 설정
+            const blocks = document.querySelectorAll(".number-block");
+            blocks.forEach(block => {
+                block.style.visibility = "visible";
+            });
+
+            // 슬롯 초기화
+            const slots = document.querySelectorAll(".image-slot");
+            slots.forEach(slot => {
+                slot.style.backgroundImage = "";
+                slot.dataset.current = "";
+            });
+
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                loadQuestion();
+            } else {
+                window.location.href = `score2.html?score2=${score2}`;
+            }
+        }
+
+        function checkCorrect() {
+            const slots = document.querySelectorAll(".image-slot");
+            return Array.from(slots).every(slot => 
+                parseInt(slot.dataset.current) === parseInt(slot.dataset.correct)
+            );
+        }
+
+        const blocks = document.querySelectorAll(".number-block");
+        blocks.forEach(block => {
+            block.addEventListener("dragstart", event => {
+                event.dataTransfer.setData("text", event.target.id);
+            });
+        });
+
+        const slots = document.querySelectorAll(".image-slot");
+        slots.forEach(slot => {
+            slot.addEventListener("dragover", event => event.preventDefault());
+            slot.addEventListener("drop", event => {
+                const blockId = event.dataTransfer.getData("text");
+                const block = document.getElementById(blockId);
+
+                if (!slot.dataset.current) {
+                    slot.dataset.current = block.textContent;
+                    block.style.visibility = "hidden";
+                }
+
+                if (isCompleted()) {
+                    if (checkCorrect()) {
+                        document.getElementById("resultMessage").textContent = "맞습니다!";
+                        score2++;
+                        updateScore();
+                        setTimeout(moveToNextQuestion, 1000); // 1초 후 다음 문제
+                    } else {
+                        document.getElementById("resultMessage").textContent = "틀렸습니다!";
+                        setTimeout(moveToNextQuestion, 1000); // 1초 후 다음 문제로 넘어가도록 설정
+                    }
+                }
+            });
+        });
+
+        function isCompleted() {
+            const slots = document.querySelectorAll(".image-slot");
+            return Array.from(slots).every(slot => slot.dataset.current !== "");
+        }
+
+        window.onload = loadQuestion;
+    </script>
+
+</body>
+</html>

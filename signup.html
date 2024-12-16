@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>회원가입</title>
+    <style>
+    	@font-face {
+            font-family: 'DungGeunMo';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/DungGeunMo.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #3564AD;
+            font-family: 'DungGeunMo', sans-serif;
+        }
+        h1 {
+            font-size: 5rem;
+            margin-bottom: 60px;
+            color: #FFCB05;
+            text-shadow: 
+                4px 4px 0 #2A75BB, 
+                5px 5px 0 #000000, 
+                6px 6px 5px rgba(0, 0, 0, 0.5);
+        }
+        .form-container {
+            text-align: center;
+        }
+        input {
+            display: block;
+            margin: 10px auto;
+            padding: 10px;
+            width: 300px;
+            font-family: 'DungGeunMo', sans-serif;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #FFCB05;
+            border: none;
+            cursor: pointer;
+            font-family: 'DungGeunMo', sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>회원가입</h1>
+        <form onsubmit="saveUser(event)">
+            <input type="text" id="username" placeholder="아이디" required />
+            <input type="password" id="password" placeholder="비밀번호" required />
+            <button type="submit">가입하기</button>
+        </form>
+    </div>
+    <script>
+        function saveUser(event) {
+            event.preventDefault();
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+            localStorage.setItem("username", username);
+            localStorage.setItem("password", password);
+            alert("회원가입이 완료되었습니다!");
+            window.location.href = "index.html";
+        }
+    </script>
+</body>
+</html>

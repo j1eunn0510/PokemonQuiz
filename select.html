@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>퀴즈선택</title>
+    <style>
+        @font-face {
+            font-family: 'DungGeunMo';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/DungGeunMo.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #3564AD;
+            font-family: 'DungGeunMo', sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100vh;
+        }
+
+        .intro_game-title {
+            font-weight: bold;
+            font-size: 5rem;
+            margin-top: 60px;
+            margin-bottom: 60px;
+            color: #FFCB05;
+            text-align: center;
+            text-shadow: 
+                4px 4px 0 #2A75BB, 
+                5px 5px 0 #000000, 
+                6px 6px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        .quiz-box {
+            background-color: #3564AD;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .quiz-item {
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 25px;
+            border-radius: 10px;
+            border: 2px solid #000000;
+            cursor: pointer;
+            width: 350px;
+            height: 500px;
+            transition: all 0.3s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            background-color: white;
+        }
+
+        .quiz-item:hover {
+            transform: translate(0px, -10px);
+            box-shadow: 0px 0px 20px white;
+        }
+
+       .quiz-item img {
+            width: 40px;     /* 이미지의 가로 크기 40px */
+            height: 40px;    /* 이미지의 세로 크기 40px */
+            object-fit: cover; /* 이미지가 박스 안에 잘 맞도록 */
+            border-radius: 10px;
+        }
+
+        .footer-text {
+            margin-top: 20px;
+            text-align: center;
+            color: white;
+            font-size: 2rem;
+            margin-bottom: 40px;
+        }
+        .quiz-item {
+		    color: black;
+		    padding: 20px;
+		    text-align: center;
+		    font-size: 2rem; /* 텍스트 크기 */
+		    border-radius: 10px;
+		    border: 2px solid #000000;
+		    cursor: pointer;
+		    width: 350px;
+		    height: 500px;
+		    transition: all 0.3s ease-in-out;
+		    display: flex;
+		    flex-direction: column; /* 수직 정렬 */
+		    justify-content: space-between; /* 텍스트와 이미지 간격 확보 */
+		    align-items: center;
+		    gap: 10px; /* 텍스트와 이미지 사이 간격 */
+		    background-color: white;
+		}
+		
+		.quiz-item p {
+		    margin-bottom: 20px; /* 텍스트 아래 공백 추가 */
+		}
+		
+		.quiz-item img {
+		    width: 300px; /* 이미지 가로 크기 */
+		    height: 300px; /* 이미지 세로 크기 */
+		    object-fit: cover; /* 박스에 맞게 이미지 크기 조정 */
+		    border-radius: 10px; /* 모서리 둥글게 */
+		}
+		
+		.quiz-item:hover {
+		    transform: translate(0px, -10px);
+		    box-shadow: 0px 0px 20px white;
+		}
+    </style>
+</head>
+<body>
+
+    <div class="intro_game-title">포켓몬 퀴즈</div>
+
+    <div class="quiz-box">
+        <div class="quiz-item" onclick="location.href='quiz1.html'">
+            <img src="./selectimg/quiz1.png" alt="Quiz 1 Image">
+            <p>Quiz1<br><br>실루엣 맞추기<br></p>
+        </div>
+        <div class="quiz-item" onclick="location.href='quiz2.html'">
+            <img src="./selectimg/quiz2.png" alt="Quiz 2 Image">
+            <p>Quiz2<br><br>진화 순서 나열하기<br></p>
+        </div>
+        <div class="quiz-item" onclick="location.href='quiz3.html'">
+            <img src="./selectimg/quiz3.png" alt="Quiz 3 Image">
+            <p>Quiz3<br><br>이름 맞추기<br></p>
+        </div>
+    </div>
+
+    <div class="footer-text">원하는 퀴즈를 선택하세요!</div>
+
+</body>
+</html>

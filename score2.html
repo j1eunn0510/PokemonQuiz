@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게임 점수</title>
+    <style>
+        @font-face {
+            font-family: 'DungGeunMo';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/DungGeunMo.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+        body {
+            font-family: 'DungGeunMo', sans-serif;
+            background-color: #3564AD;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .score-title {
+            font-size: 3rem;
+            margin-bottom: 30px;
+            color: #FFCB05;
+        }
+
+        .score-result {
+            font-size: 5rem;
+            color: #FFCB05;
+            margin-bottom: 40px;
+        }
+
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .button-container button {
+        	font-family: 'DungGeunMo', sans-serif;
+            background-color: #FFCB05;
+            color: #2A75BB;
+            border: none;
+            padding: 15px;
+            width: 200px;
+            font-size: 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .button-container button:hover {
+            background-color: #FFAA00;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="score-title">당신의 점수는</div>
+    <div class="score-result" id="scoreResult"></div>
+    <div class="button-container">
+        <button onclick="goToRanking()">랭킹 보기</button>
+        <button onclick="window.location.href='index.html'">홈으로</button>
+        <button onclick="window.location.href='select.html'">다시하기</button>
+    </div>
+    
+    <script>
+        // URL에서 점수 가져오기
+        const urlParams = new URLSearchParams(window.location.search);
+        let score2 = urlParams.get('score2');
+        score2 = parseInt(score2, 10); // 점수를 정수로 변환
+    
+        // 점수 표시
+        document.getElementById("scoreResult").textContent = `${score2}점!`;
+    
+        // 랭킹 보기 버튼 기능
+        function goToRanking() {
+            const username = localStorage.getItem('username'); // localStorage에서 username 가져오기
+            if (!username) {
+                alert("로그인이 필요합니다!");
+                return;
+            }
+            // username과 score를 URL로 전달
+            window.location.href = `rank2.html?username=${username}&score2=${score2}`;
+        }
+    </script>
+    
+</body>
+</html>
